@@ -21,24 +21,14 @@ require_once 'admin/admin.php';
 define('WP_DISABLE_RIGHT_CLICK', '1.0.0');
 
 
-//require_once(plugin_dir_path('admin/admin.php'));
-
-
-//add_action( 'wp_footer', 'disable_right_click_js_file' );
-
-// function disable_right_click_js_file() {
-//     //wp_enqueue_script( 'disable-script', plugin_dir_url( __FILE__ ) . 'js-disable.js');
-// }
-
-register_activation_hook(__FILE__, 'create_db_table');
-
-register_deactivation_hook(__FILE__, 'deactivate_plugin');
-
-function deactivate_plugin(): void
+function disable_right_click_js_file()
 {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'right_click';
 
-    $sql = "DROP TABLE $table_name";
-    $wpdb->query($sql);
+    if (get_option('wp_right_click_1') == true) {
+        wp_enqueue_script( 'disable-script', plugin_dir_url( __FILE__ ) . '/js/js-disable.js');
+    }
 }
+
+add_action( 'wp_footer', 'disable_right_click_js_file' );
+
+register_activation_hook(__FILE__, 'disable_right_click_js_file');
